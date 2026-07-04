@@ -1,0 +1,5 @@
+# AeroTherm Git Ignore
+thermal_log.csv
+__pycache__/
+*.pyc
+.DS_Store

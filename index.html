@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroTherm | CPU Cooling Fan & Thermal Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <!-- Chart.js for gorgeous analytics charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>AeroTherm</h1>
+                    <span>CPU Cooling & Thermal Diagnostics</span>
+                </div>
+            </div>
+            <div class="status-badge" id="system-status">
+                <span class="status-dot pulse"></span>
+                <span class="status-text">LIVE MONITOR ACTIVE</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <main class="dashboard-grid">
+            
+            <!-- Row 1: Real-time Gauges -->
+            <section class="grid-card stats-row" id="metrics-summary">
+                <!-- Card 1: Temp -->
+                <div class="metric-card" id="temp-metric">
+                    <div class="metric-header">
+                        <div class="metric-title">CPU TEMPERATURE</div>
+                        <div class="metric-icon thermal-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="radial-gauge">
+                            <svg viewBox="0 0 100 100" class="gauge-svg">
+                                <circle cx="50" cy="50" r="40" class="gauge-bg"></circle>
+                                <circle cx="50" cy="50" r="40" class="gauge-fill" id="temp-gauge-fill" style="stroke-dashoffset: 251.2;"></circle>
+                            </svg>
+                            <div class="gauge-value" id="current-temp">--°C</div>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <div>Peak: <span id="peak-temp">--°C</span></div>
+                        <div>Status: <span id="temp-status" class="badge">Checking...</span></div>
+                    </div>
+                </div>
+
+                <!-- Card 2: CPU Load -->
+                <div class="metric-card" id="load-metric">
+                    <div class="metric-header">
+                        <div class="metric-title">CPU UTILIZATION</div>
+                        <div class="metric-icon load-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="radial-gauge">
+                            <svg viewBox="0 0 100 100" class="gauge-svg">
+                                <circle cx="50" cy="50" r="40" class="gauge-bg"></circle>
+                                <circle cx="50" cy="50" r="40" class="gauge-fill" id="load-gauge-fill" style="stroke-dashoffset: 251.2;"></circle>
+                            </svg>
+                            <div class="gauge-value" id="current-load">--%</div>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <div>RAM Use: <span id="ram-usage">--%</span></div>
+                        <div>Cores Active: <span id="cores-count">--</span></div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Fan Speed -->
+                <div class="metric-card" id="fan-metric">
+                    <div class="metric-header">
+                        <div class="metric-title">COOLING FAN SPEED</div>
+                        <div class="metric-icon fan-icon">
+                            <svg id="animated-fan-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                <path d="M12 9c0 -3.5 1.5 -5 3 -5s2 1.5 2 3c0 2.5 -3 4 -5 4" />
+                                <path d="M15 12c3.5 0 5 1.5 5 3s-1.5 2 -3 2c-2.5 0 -4 -3 -4 -5" />
+                                <path d="M12 15c0 3.5 -1.5 5 -3 5s-2 -1.5 -2 -3c0 -2.5 3 -4 5 -4" />
+                                <path d="M9 12c-3.5 0 -5 -1.5 -5 -3s1.5 -2 3 -2c2.5 0 4 3 4 5" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="radial-gauge">
+                            <svg viewBox="0 0 100 100" class="gauge-svg">
+                                <circle cx="50" cy="50" r="40" class="gauge-bg"></circle>
+                                <circle cx="50" cy="50" r="40" class="gauge-fill" id="fan-gauge-fill" style="stroke-dashoffset: 251.2;"></circle>
+                            </svg>
+                            <div class="gauge-value" id="current-fan">-- RPM</div>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <div>Max Fan Speed: <span id="peak-fan">-- RPM</span></div>
+                        <div>Fan Activity: <span id="fan-status" class="badge">Checking...</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Row 2: Diagnostics & Controls -->
+            <section class="grid-card analysis-card">
+                <div class="card-header">
+                    <h2>Cooling Effectiveness Report</h2>
+                    <span class="refresh-time" id="analysis-time">Updated just now</span>
+                </div>
+                <div class="analysis-content">
+                    <div class="score-container">
+                        <div class="score-circle-wrapper">
+                            <svg viewBox="0 0 100 100" class="score-ring">
+                                <circle cx="50" cy="50" r="45" class="score-ring-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="score-ring-fill" id="score-ring-fill" style="stroke-dashoffset: 282.7;"></circle>
+                            </svg>
+                            <div class="score-grade" id="thermal-grade">?</div>
+                        </div>
+                        <div class="score-meta">
+                            <span class="score-title">THERMAL GRADE</span>
+                            <span class="score-description" id="score-desc">Analyzing data...</span>
+                        </div>
+                    </div>
+                    <div class="report-box">
+                        <p id="assessment-text">Please run the system for a few minutes or execute a CPU Stress Test to compile the cooling diagnostic report.</p>
+                    </div>
+                    <div class="metrics-comparison">
+                        <div class="comp-box">
+                            <span class="comp-label">Avg Idle Temp</span>
+                            <span class="comp-val" id="comp-idle">--°C</span>
+                        </div>
+                        <div class="comp-box">
+                            <span class="comp-label">Avg Peak Temp</span>
+                            <span class="comp-val" id="comp-peak">--°C</span>
+                        </div>
+                        <div class="comp-box">
+                            <span class="comp-label">Max Load Reached</span>
+                            <span class="comp-val" id="comp-load">--%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Row 3: CPU stress tester -->
+            <section class="grid-card stress-tester-card">
+                <div class="card-header">
+                    <h2>Thermal Stress Tester</h2>
+                    <span class="card-subtitle">Test cooling capacity under 100% CPU load</span>
+                </div>
+                <div class="stress-controls">
+                    <div class="stress-warning">
+                        <div class="warn-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="#f59e0b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <p>This utility spawns load processes on all CPU cores to test heat dissipation under heavy work. It automatically shuts down after the timer expires.</p>
+                    </div>
+                    <div class="stress-btn-container">
+                        <button id="btn-stress-start" class="btn btn-primary">
+                            <span class="btn-text">Start 60s Stress Test</span>
+                        </button>
+                        <button id="btn-stress-stop" class="btn btn-danger hidden">
+                            <span class="btn-text">Abort Stress Test</span>
+                        </button>
+                    </div>
+                    <div id="stress-status-display" class="stress-status hidden">
+                        <div class="stress-timer">
+                            <span class="time-left" id="stress-time">60</span>s
+                            <span class="time-label">REMAINING</span>
+                        </div>
+                        <div class="stress-progress-bar">
+                            <div class="stress-progress-fill" id="stress-progress-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Row 4: Charts -->
+            <section class="grid-card charts-card">
+                <div class="card-header">
+                    <h2>Thermal & Load Analytics History</h2>
+                    <div class="chart-toggles">
+                        <button id="btn-show-history" class="chart-tab active">Load & Temp Timeline</button>
+                        <button id="btn-show-scatter" class="chart-tab">Thermal Curve (Correlation)</button>
+                    </div>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="timeline-chart" class="chart-canvas"></canvas>
+                    <canvas id="scatter-chart" class="chart-canvas hidden"></canvas>
+                </div>
+            </section>
+
+            <!-- Row 5: Process Monitor -->
+            <section class="grid-card process-card">
+                <div class="card-header">
+                    <h2>Active CPU Consumers</h2>
+                    <span class="card-subtitle">Processes causing temperature fluctuations</span>
+                </div>
+                <div class="table-container">
+                    <table class="process-table">
+                        <thead>
+                            <tr>
+                                <th>Process Name</th>
+                                <th>PID</th>
+                                <th>CPU Utilization</th>
+                            </tr>
+                        </thead>
+                        <tbody id="process-list">
+                            <tr>
+                                <td colspan="3" class="table-loading">Awaiting sensor update...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>AeroTherm Cooling Diagnostic Utility • Running locally on Port 8888</p>
+        </footer>
+    </div>
+    
+    <script src="index.js"></script>
+</body>
+</html>
