@@ -1,6 +1,6 @@
 # AeroTherm 🌡️💨
 
-AeroTherm is a premium, lightweight, real-time CPU thermal diagnostic dashboard and background monitor. Designed for Linux systems (especially Dell motherboards using the `dell_smm` driver), it monitors CPU temperatures, overall & per-core utilization, RAM usage, active processes, and fan speeds, logging history to help you evaluate the effectiveness of your cooling setup.
+AeroTherm is a lightweight, real-time CPU thermal diagnostic dashboard and background monitor. Designed for Linux systems (especially Dell motherboards using the `dell_smm` driver), it monitors CPU temperatures, overall & per-core utilization, RAM usage, active processes, and fan speeds, logging history to help you evaluate the effectiveness of your cooling setup.
 
 It includes an integrated **Thermal Stress Tester** that allows you to safely stress your CPU to 100% load for 60 seconds directly from the browser, helping you see how effectively your cooling fan handles peak heat and how quickly it recovers.
 
