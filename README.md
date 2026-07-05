@@ -55,4 +55,4 @@ pip install psutil
 
 ## 📜 License
 
-This project is licensed under the MIT License. Feel free to use, modify, and distribute it!
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. You are free to use, modify, and distribute it under the same license terms. See the [LICENSE](LICENSE) file for full details.
